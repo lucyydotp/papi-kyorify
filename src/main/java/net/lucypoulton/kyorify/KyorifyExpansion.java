@@ -2,17 +2,13 @@ package net.lucypoulton.kyorify;
 
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public class KyorifyExpansion extends PlaceholderExpansion {
-    final MiniMessage mm = MiniMessage.miniMessage();
     @Override
     public @NotNull String getIdentifier() {
         return "kyorify";
@@ -20,12 +16,17 @@ public class KyorifyExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return "Lucy Poulton (99% kyori code though)";
+        return "Lucy Poulton";
     }
 
     @Override
     public @NotNull String getVersion() {
-        return "1.0";
+        return "1.1";
+    }
+
+    private static String log(String str) {
+        Bukkit.getLogger().info(str);
+        return str;
     }
 
     @Override
@@ -35,8 +36,7 @@ public class KyorifyExpansion extends PlaceholderExpansion {
                 .getLocalExpansionManager()
                 .getExpansion(split[0]))
                 .map(ex -> ex.onRequest(player, split.length >= 2 ? split[1] : ""))
-                .map(str -> ChatColor.translateAlternateColorCodes('&', str))
-                .map(str -> mm.serialize(LegacyComponentSerializer.legacySection().deserialize(str)))
+                .map(str -> Kyorifier.kyorify(str.replace("&", "§")))
                 .orElse(null);
     }
 }

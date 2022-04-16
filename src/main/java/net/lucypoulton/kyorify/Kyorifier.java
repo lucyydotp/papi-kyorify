@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public final class Kyorifier {
     private static final Map<Character, String> COLOURS = new HashMap<>(15);
     private static final Map<Character, String> FORMATTERS = new HashMap<>(6);
-    private static final Pattern pattern = Pattern.compile("§(?<code>[0-9a-fk-or])|[§{\\[<]?#(?<hex>[A-Fa-f0-9]{6})[}\\]>]?");
+    private static final Pattern pattern = Pattern.compile("&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[A-Fa-f\\d]){6})[}\\]>]?");
 
     static {
         COLOURS.put('0', "black");
@@ -42,11 +42,11 @@ public final class Kyorifier {
 
     public static String kyorify(String input) {
         final AtomicBoolean activeFormatters = new AtomicBoolean(false);
-        return pattern.matcher(input).replaceAll(result -> {
+        return pattern.matcher(input.replace("§", "&")).replaceAll(result -> {
             final Matcher matcher = (Matcher) result;
             final var hex = matcher.group("hex");
             final var code = matcher.group("code");
-            final var colour = hex == null ? COLOURS.get(code.charAt(0)) : "#" + hex;
+            final var colour = hex == null ? COLOURS.get(code.charAt(0)) : "#" + hex.replace("&", "");
 
             if (colour == null) {
                 final var formatter = FORMATTERS.get(code.charAt(0));

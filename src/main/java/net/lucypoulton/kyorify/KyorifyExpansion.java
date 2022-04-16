@@ -21,7 +21,7 @@ public class KyorifyExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.1";
+        return "1.2";
     }
 
     private static String log(String str) {
@@ -36,7 +36,7 @@ public class KyorifyExpansion extends PlaceholderExpansion {
                 .getLocalExpansionManager()
                 .getExpansion(split[0]))
                 .map(ex -> ex.onRequest(player, split.length >= 2 ? split[1] : ""))
-                .map(str -> Kyorifier.kyorify(str.replace("&", "§")))
+                .map(Kyorifier::kyorify)
                 .orElse(null);
     }
 }

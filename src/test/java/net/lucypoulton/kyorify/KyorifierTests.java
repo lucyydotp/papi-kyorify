@@ -26,7 +26,7 @@ public class KyorifierTests {
 
     @Test
     public void givenALegacyFormatterAndColour_expectColourToReset() {
-        assertEquals("<italic>hello <reset><green>world", kyorify("§ohello §aworld"));
+        assertEquals("<italic>hello </italic><green>world", kyorify("§ohello §aworld"));
     }
 
     @Test

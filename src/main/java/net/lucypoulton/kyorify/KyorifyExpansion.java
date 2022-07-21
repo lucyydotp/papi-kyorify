@@ -23,7 +23,7 @@ public class KyorifyExpansion extends PlaceholderExpansion implements Relational
 
     @Override
     public @NotNull String getVersion() {
-        return "1.2";
+        return "1.4";
     }
 
     private static String log(String str) {

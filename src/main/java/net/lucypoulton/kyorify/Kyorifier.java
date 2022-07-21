@@ -2,7 +2,7 @@ package net.lucypoulton.kyorify;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +41,7 @@ public final class Kyorifier {
     }
 
     public static String kyorify(String input) {
-        final AtomicBoolean activeFormatters = new AtomicBoolean(false);
+        final Stack<String> activeFormatters = new Stack<>();
         return pattern.matcher(input.replace("§", "&")).replaceAll(result -> {
             final Matcher matcher = (Matcher) result;
             final var hex = matcher.group("hex");
@@ -50,12 +50,16 @@ public final class Kyorifier {
 
             if (colour == null) {
                 final var formatter = FORMATTERS.get(code.charAt(0));
-                activeFormatters.set(!formatter.equals("reset"));
+                if (!formatter.equals("reset")) activeFormatters.push(formatter);
                 return "<" + formatter + ">";
             } else {
-               final var out = (activeFormatters.get() ? "<reset><" : "<") + colour + ">";
-               activeFormatters.set(false);
-               return out;
+                final var out = new StringBuilder();
+                while (!activeFormatters.isEmpty()) {
+                    out.append("</").append(activeFormatters.pop()).append(">");
+                }
+                out.append("<").append(colour).append(">");
+
+               return out.toString();
             }
         });
     }

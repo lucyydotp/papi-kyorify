@@ -40,6 +40,14 @@ public final class Kyorifier {
         FORMATTERS.put('r', "reset");
     }
 
+    private static StringBuilder closeAll(Stack<String> activeFormatters) {
+        final var out = new StringBuilder();
+        while (!activeFormatters.isEmpty()) {
+            out.append("</").append(activeFormatters.pop()).append(">");
+        }
+        return out;
+    }
+
     public static String kyorify(String input) {
         final Stack<String> activeFormatters = new Stack<>();
         return pattern.matcher(input.replace("§", "&")).replaceAll(result -> {
@@ -50,16 +58,16 @@ public final class Kyorifier {
 
             if (colour == null) {
                 final var formatter = FORMATTERS.get(code.charAt(0));
-                if (!formatter.equals("reset")) activeFormatters.push(formatter);
+                if (formatter.equals("reset")) {
+                    return closeAll(activeFormatters).toString();
+                }
+                activeFormatters.push(formatter);
                 return "<" + formatter + ">";
             } else {
-                final var out = new StringBuilder();
-                while (!activeFormatters.isEmpty()) {
-                    out.append("</").append(activeFormatters.pop()).append(">");
-                }
+                final var out = closeAll(activeFormatters);
                 out.append("<").append(colour).append(">");
 
-               return out.toString();
+                return out.toString();
             }
         });
     }

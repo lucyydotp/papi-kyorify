@@ -35,8 +35,8 @@ public class KyorifierTests {
     }
 
     @Test
-    public void givenColoursAndReset_expectReset() {
-        assertEquals("<red>red <italic>italic <reset>reset", kyorify("§cred §oitalic §rreset"));
+    public void givenColoursAndReset_expectClosedFormatters() {
+        assertEquals("<red>red <italic>italic </italic>reset", kyorify("§cred §oitalic §rreset"));
     }
 
     @Test

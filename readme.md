@@ -4,8 +4,8 @@ ones (referred to as Kyorifying). I originally created this for [ChatChat](https
 
 It's incredibly simple:
 - chop off `kyorify_` prefix and parse it with PAPI
-- replace & with § and deserialise using LegacyComponentSerializer
-- serialize with MiniMessage
+- replace & with §
+- swap out formatters for MM tags, closing other tags when needed
 
 ## Usage
 Just put `kyorify` in front of any placeholder.

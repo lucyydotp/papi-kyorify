@@ -53,6 +53,7 @@ public class KyorifyExpansion extends PlaceholderExpansion implements Relational
             .getLocalExpansionManager()
             .getExpansion(split[0]);
 
+        if (expansion == null) return null;
         if (!(expansion instanceof final Relational relational)) return null;
 
         return Optional.of(relational)

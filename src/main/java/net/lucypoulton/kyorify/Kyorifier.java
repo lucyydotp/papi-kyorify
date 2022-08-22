@@ -12,7 +12,9 @@ import java.util.regex.Pattern;
 public final class Kyorifier {
     private static final Map<Character, String> COLOURS = new HashMap<>(15);
     private static final Map<Character, String> FORMATTERS = new HashMap<>(6);
-    private static final Pattern pattern = Pattern.compile("&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[A-Fa-f\\d]){6})[}\\]>]?");
+    private static final Pattern pattern = Pattern.compile("" +
+            "&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[a-f\\d]){6})[}\\]>]?",
+            Pattern.CASE_INSENSITIVE);
 
     static {
         COLOURS.put('0', "black");
@@ -54,10 +56,12 @@ public final class Kyorifier {
             final Matcher matcher = (Matcher) result;
             final var hex = matcher.group("hex");
             final var code = matcher.group("code");
-            final var colour = hex == null ? COLOURS.get(code.charAt(0)) : "#" + hex.replace("&", "");
+            final var colour = hex == null ?
+                    COLOURS.get(Character.toLowerCase(code.charAt(0)))
+                    : "#" + hex.replace("&", "");
 
             if (colour == null) {
-                final var formatter = FORMATTERS.get(code.charAt(0));
+                final var formatter = FORMATTERS.get(Character.toLowerCase(code.charAt(0)));
                 if (formatter.equals("reset")) {
                     return closeAll(activeFormatters).toString();
                 }

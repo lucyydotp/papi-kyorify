@@ -45,4 +45,9 @@ public class KyorifierTests {
                 "<#abcdef>cmi <#abcdef>kyori <#abcdef>minimessage <#123456>bungee",
                 kyorify("{#abcdef}cmi §#abcdefkyori <#abcdef>minimessage &x&1&2&3&4&5&6bungee"));
     }
+
+    @Test
+    public void givenMixedCase_expectTranslated() {
+        assertEquals("<italic>Capitalisation </italic><green>Test", kyorify("§OCapitalisation §ATest"));
+    }
 }
